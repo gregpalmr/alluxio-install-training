@@ -8,9 +8,10 @@
 
 This git repo provides a small environment used to install Alluxio Enterprise Edition with multiple masters for HA, with multiple workers and integrated with an S3 compatibile root under file system (UFS). Additionally, this training sandbox allows the integration with:
 
-- Trino
-- Hive metastore
-- Spark
+- Alluxio - to be installed
+- Trino - pre-installed, but not integrated with Alluxio
+- Hive metastore - pre-installed, but not integrated with Alluxio
+- Spark - pre-installed, but not integrated with Alluxio
 
 Finally, this training sanbox allows the setup of TLS encryption of Alluxio processes using the Alluxio Enterprise Edition TLS encryption. 
 
