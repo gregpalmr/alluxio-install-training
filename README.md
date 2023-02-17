@@ -74,11 +74,31 @@ To access the Alluxio worker node containers, use these commands:
      docker exec -it alluxio-worker-1 bash
      docker exec -it alluxio-worker-2 bash
 
-### Step 5. Install and Configure Alluxio Master Nodes
+### Step 5. Install Alluxio with a single master (no HA) 
 
      TBD
 
-### Step 6. Install and Configure Alluxio Worker  Nodes
+### Step 6. Install Alluxio with a three masters (HA) 
+
+     TBD
+
+### Step 7. Configure Trino to integrate with Alluxio
+
+     TBD
+
+### Step 8. Configure Spark to integrate with Alluxio
+
+     TBD
+
+### Step 9. Configure Alluxio with "northbound" Kerberos integration
+
+     TBD
+
+### Step 10. Configure Alluxio with TLS encryption
+
+     TBD
+
+### Step 11. Configure Alluxio with encryption at rest
 
      TBD
 
