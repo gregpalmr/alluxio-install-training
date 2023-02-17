@@ -30,6 +30,7 @@ services:
       - create-tls-certs
       - minio-create-buckets
     volumes:
+      - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/alluxio/underFSStorage
       - keystore:/alluxio/certs
     expose:
@@ -42,6 +43,12 @@ services:
       - 19200:19200
     entrypoint: >
       /bin/sh -c "
+        groupadd --gid 1006 alluxio
+        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        mkdir -p   /home/alluxio/.ssh/ 
+        chmod 0700 /home/alluxio/.ssh
+        touch      /home/alluxio/.ssh/authorized_keys 
+        chmod 600  /home/alluxio/.ssh/authorized_keys
         tail -f /dev/null
         "
 
@@ -59,6 +66,7 @@ services:
     environment:
       TBD_ENV: "TBD"
     volumes:
+      - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/alluxio/underFSStorage
       - keystore:/alluxio/certs
     expose:
@@ -67,6 +75,12 @@ services:
       - 19200
     entrypoint: >
       /bin/sh -c "
+        groupadd --gid 1006 alluxio
+        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        mkdir -p   /home/alluxio/.ssh/ 
+        chmod 0700 /home/alluxio/.ssh
+        touch      /home/alluxio/.ssh/authorized_keys 
+        chmod 600  /home/alluxio/.ssh/authorized_keys
         tail -f /dev/null
         "
 
@@ -84,6 +98,7 @@ services:
     environment:
       TBD_ENV: "TBD"
     volumes:
+      - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/opt/alluxio/underFSStorage
       - keystore:/alluxio/certs
     expose:
@@ -92,6 +107,12 @@ services:
       - 19200
     entrypoint: >
       /bin/sh -c "
+        groupadd --gid 1006 alluxio
+        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        mkdir -p   /home/alluxio/.ssh/ 
+        chmod 0700 /home/alluxio/.ssh
+        touch      /home/alluxio/.ssh/authorized_keys 
+        chmod 600  /home/alluxio/.ssh/authorized_keys
         tail -f /dev/null
         "
 
@@ -107,6 +128,7 @@ services:
     depends_on:
       - create-tls-certs
     volumes:
+      - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/opt/alluxio/underFSStorage
       - keystore:/alluxio/certs
     expose:
@@ -121,6 +143,12 @@ services:
       - 39999:39999
     entrypoint: >
       /bin/sh -c "
+        groupadd --gid 1006 alluxio
+        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        mkdir -p   /home/alluxio/.ssh/ 
+        chmod 0700 /home/alluxio/.ssh
+        touch      /home/alluxio/.ssh/authorized_keys 
+        chmod 600  /home/alluxio/.ssh/authorized_keys
         tail -f /dev/null
         "
 
@@ -136,6 +164,7 @@ services:
     depends_on:
       - create-tls-certs
     volumes:
+      - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/alluxio/underFSStorage
       - keystore:/alluxio/certs
     expose:
