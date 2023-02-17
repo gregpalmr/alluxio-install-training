@@ -171,7 +171,9 @@ services:
         cp /tmp/etc/catalog/minio.properties /etc/trino/catalog/minio.properties
         cp /tmp/etc/catalog/tpcds.properties /etc/trino/catalog/tpcds.properties
         cp /tmp/etc/catalog/tpch.properties /etc/trino/catalog/tpch.properties
+        cp /tmp/conf/trino-core-site.xml /etc/trino/core-site.xml
         /usr/lib/trino/bin/run-trino
+        tail -f /dev/null
 
   hive-metastore:
     image: 'bitsondatadev/hive-metastore:latest'
