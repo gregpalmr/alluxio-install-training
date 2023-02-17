@@ -1,0 +1,335 @@
+version: '3.7'
+
+services:
+
+  create-tls-certs:
+    user: root
+    image: openjdk:18.0.2.1-jdk-slim-buster
+    hostname: create-tls-certs
+    container_name: create-tls-certs
+    restart: "no"
+    networks:
+      custom:
+        ipv4_address: 174.23.0.30
+    volumes:
+      - ./scripts/create-tls-certs.sh:/scripts/create-tls-certs.sh:ro
+      - ./conf/masters:/opt/alluxio/conf/masters:ro
+      - ./conf/workers:/opt/alluxio/conf/workers:ro
+      - keystore:/alluxio/certs
+    command: ["/scripts/create-tls-certs.sh"]
+
+  alluxio-master-1:
+    user: root
+    image: 'centos:centos7'
+    hostname: alluxio-master-1
+    container_name: alluxio-master-1
+    networks:
+      custom:
+        ipv4_address: 174.23.0.5
+    depends_on:
+      - create-tls-certs
+      - minio-create-buckets
+    volumes:
+      - alluxio-data:/alluxio/underFSStorage
+      - keystore:/alluxio/certs
+    expose:
+      - 19998
+      - 19999
+      - 19200
+    ports:
+      - 19998:19998
+      - 19999:19999
+      - 19200:19200
+    entrypoint: >
+      /bin/sh -c "
+        tail -f /dev/null
+        "
+
+  alluxio-master-2:
+    user: root
+    image: 'centos:centos7'
+    hostname: alluxio-master-2
+    container_name: alluxio-master-2
+    networks:
+      custom:
+        ipv4_address: 174.23.0.6
+    depends_on:
+      - create-tls-certs
+      - minio-create-buckets
+    environment:
+      TBD_ENV: "TBD"
+    volumes:
+      - alluxio-data:/alluxio/underFSStorage
+      - keystore:/alluxio/certs
+    expose:
+      - 19998
+      - 19999
+      - 19200
+    entrypoint: >
+      /bin/sh -c "
+        tail -f /dev/null
+        "
+
+  alluxio-master-3:
+    user: root
+    image: 'centos:centos7'
+    hostname: alluxio-master-3
+    container_name: alluxio-master-3
+    networks:
+      custom:
+        ipv4_address: 174.23.0.7
+    depends_on:
+      - create-tls-certs
+      - minio-create-buckets
+    environment:
+      TBD_ENV: "TBD"
+    volumes:
+      - alluxio-data:/opt/alluxio/underFSStorage
+      - keystore:/alluxio/certs
+    expose:
+      - 19998
+      - 19999
+      - 19200
+    entrypoint: >
+      /bin/sh -c "
+        tail -f /dev/null
+        "
+
+  alluxio-worker-1:
+    user: root
+    image: 'centos:centos7'
+    hostname: alluxio-worker-1
+    container_name: alluxio-worker-1
+    networks:
+      custom:
+        ipv4_address: 174.23.0.11
+    shm_size: '1gb'
+    depends_on:
+      - create-tls-certs
+    volumes:
+      - alluxio-data:/opt/alluxio/underFSStorage
+      - keystore:/alluxio/certs
+    expose:
+      - 29999
+      - 30000
+      - 30001
+      - 30003
+      - 39999
+    ports:
+      - 29999:29999
+      - 30000:30000
+      - 39999:39999
+    entrypoint: >
+      /bin/sh -c "
+        tail -f /dev/null
+        "
+
+  alluxio-worker-2:
+    user: root
+    image: 'centos:centos7'
+    hostname: alluxio-worker-2
+    container_name: alluxio-worker-2
+    networks:
+      custom:
+        ipv4_address: 174.23.0.12
+    shm_size: '1gb'
+    depends_on:
+      - create-tls-certs
+    volumes:
+      - alluxio-data:/alluxio/underFSStorage
+      - keystore:/alluxio/certs
+    expose:
+      - 29999
+      - 30000
+      - 30001
+      - 30003
+      - 39999
+    entrypoint: >
+      /bin/sh -c "
+        tail -f /dev/null
+        "
+
+  trino-coordinator:
+    image: 'trinodb/trino:385'
+    hostname: trino-coordinator
+    container_name: trino-coordinator
+    networks:
+      custom:
+        ipv4_address: 174.23.0.15
+    depends_on:
+      - create-tls-certs
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./etc:/tmp/etc:ro
+      - ./conf:/tmp/conf:ro
+      - keystore:/alluxio/certs
+    command:
+      - /bin/bash
+      - -c 
+      - |
+        cp /tmp/etc/catalog/minio.properties /etc/trino/catalog/minio.properties
+        cp /tmp/etc/catalog/tpcds.properties /etc/trino/catalog/tpcds.properties
+        cp /tmp/etc/catalog/tpch.properties /etc/trino/catalog/tpch.properties
+        /usr/lib/trino/bin/run-trino
+
+  hive-metastore:
+    image: 'bitsondatadev/hive-metastore:latest'
+    hostname: hive-metastore
+    container_name: hive-metastore
+    networks:
+      custom:
+        ipv4_address: 174.23.0.4
+    volumes:
+      - ./conf:/tmp/conf:ro
+      - keystore:/alluxio/certs
+    environment:
+      METASTORE_DB_HOSTNAME: mariadb
+    depends_on:
+      - mariadb
+      - minio
+    ports:
+      - '9083:9083' # Metastore Thrift
+    entrypoint: >
+      /bin/sh -c "
+        cp /tmp/conf/metastore-site.xml /opt/apache-hive-metastore-3.0.0-bin/conf/metastore-site.xml
+        /entrypoint.sh
+        tail -f /dev/null
+        "
+
+  # Mariadb is used by the Hive metastore service
+  mariadb:
+    image: 'mariadb:latest'
+    hostname: mariadb
+    container_name: mariadb
+    networks:
+      custom:
+        ipv4_address: 174.23.0.2
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_DATABASE: metastore_db
+    volumes:
+      - mariadb-data:/var/lib/mysql
+
+  # MinIO is used by Alluxio as the root under store or UFS
+  minio:
+    image: 'minio/minio:latest'
+    hostname: minio
+    container_name: minio
+    networks:
+      custom:
+        ipv4_address: 174.23.0.3
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server --console-address ":9001" /data
+
+  minio-create-buckets:
+    image: minio/mc:latest
+    container_name: minio-create-buckets
+    networks:
+      custom:
+        ipv4_address: 174.23.0.25
+    depends_on:
+      - minio
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc config host add myminio http://minio:9000 minio minio123;
+      if [ \"`/usr/bin/mc ls myminio`\" == \"\" ]; then 
+         echo \"Creating bucket myminio/hive\" && \
+         /usr/bin/mc mb myminio/hive && \
+         /usr/bin/mc policy download myminio/hive && \
+         /usr/bin/mc cp /etc/motd myminio/hive/warehouse/.temp_file; 
+      else 
+         echo \"Bucket myminio/hive already exists, skipping create\"; 
+      fi;
+      exit 0
+      "
+
+  spark-master:
+    image: docker.io/bitnami/spark:3.3
+    hostname: spark-master
+    container_name: spark-master
+    networks:
+      custom:
+        ipv4_address: 174.23.0.20
+    volumes:
+      - ./conf:/tmp/conf
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - 8081:8080
+    expose:
+      - 8081
+    command:
+      - /bin/sh
+      - -c 
+      - |
+        echo "spark.hadoop.hive.metastore.uris=thrift://hive-metastore:9083" >> /opt/bitnami/spark/conf/spark-defaults.conf
+        /opt/bitnami/scripts/spark/run.sh
+        tail -f /dev/null
+
+  spark-worker:
+    image: docker.io/bitnami/spark:3.3
+    hostname: spark-worker
+    container_name: spark-worker
+    networks:
+      custom:
+        ipv4_address: 174.23.0.24
+    volumes:
+      - ./conf:/tmp/conf
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - 8082:8081
+    expose:
+      - 8082
+    command:
+      - /bin/sh
+      - -c 
+      - |
+        echo "spark.hadoop.hive.metastore.uris=thrift://hive-metastore:9083" >> /opt/bitnami/spark/conf/spark-defaults.conf
+        /opt/bitnami/scripts/spark/run.sh
+        tail -f /dev/null
+
+volumes:
+  keystore:
+    driver: local
+  mariadb-data:
+    driver: local
+  minio-data:
+    driver: local
+  alluxio-data:
+    driver: local
+
+networks:
+  custom:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 174.23.0.0/16
