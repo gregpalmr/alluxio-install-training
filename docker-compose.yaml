@@ -20,7 +20,8 @@ services:
 
   alluxio-master-1:
     user: root
-    image: 'centos:centos7'
+    #image: 'centos:centos7'
+    image: sp5429/centos-ssh:7.9.2009
     hostname: alluxio-master-1
     container_name: alluxio-master-1
     networks:
@@ -43,18 +44,29 @@ services:
       - 19200:19200
     entrypoint: >
       /bin/sh -c "
+        # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
-        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
+        # Setup passwordless ssh for alluxio user
         mkdir -p   /home/alluxio/.ssh/ 
+        cp /tmp/ssh-keys/alluxio-user-ssh-key        /home/alluxio/.ssh/id_rsa
+        cp /tmp/ssh-keys/alluxio-user-ssh-key.pub    /home/alluxio/.ssh/id_rsa.pub
+        cat /tmp/ssh-keys/alluxio-user-ssh-key.pub > /home/alluxio/.ssh/authorized_keys
         chmod 0700 /home/alluxio/.ssh
-        touch      /home/alluxio/.ssh/authorized_keys 
         chmod 600  /home/alluxio/.ssh/authorized_keys
+        chmod 400 /home/alluxio/.ssh/id_rsa*
+        chown -R alluxio:alluxio /home/alluxio
+        # Setup and start sshd daemon
+        cp /tmp/ssh-keys/sshd_config /etc/ssh/sshd_config
+        /usr/sbin/sshd
+        # Loop forever
         tail -f /dev/null
         "
 
   alluxio-master-2:
     user: root
-    image: 'centos:centos7'
+    #image: 'centos:centos7'
+    image: sp5429/centos-ssh:7.9.2009
     hostname: alluxio-master-2
     container_name: alluxio-master-2
     networks:
@@ -75,18 +87,29 @@ services:
       - 19200
     entrypoint: >
       /bin/sh -c "
+        # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
-        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
+        # Setup passwordless ssh for alluxio user
         mkdir -p   /home/alluxio/.ssh/ 
+        cp /tmp/ssh-keys/alluxio-user-ssh-key        /home/alluxio/.ssh/id_rsa
+        cp /tmp/ssh-keys/alluxio-user-ssh-key.pub    /home/alluxio/.ssh/id_rsa.pub
+        cat /tmp/ssh-keys/alluxio-user-ssh-key.pub > /home/alluxio/.ssh/authorized_keys
         chmod 0700 /home/alluxio/.ssh
-        touch      /home/alluxio/.ssh/authorized_keys 
         chmod 600  /home/alluxio/.ssh/authorized_keys
+        chmod 400 /home/alluxio/.ssh/id_rsa*
+        chown -R alluxio:alluxio /home/alluxio
+        # Setup and start sshd daemon
+        cp /tmp/ssh-keys/sshd_config /etc/ssh/sshd_config
+        /usr/sbin/sshd
+        # Loop forever
         tail -f /dev/null
         "
 
   alluxio-master-3:
     user: root
-    image: 'centos:centos7'
+    #image: 'centos:centos7'
+    image: sp5429/centos-ssh:7.9.2009
     hostname: alluxio-master-3
     container_name: alluxio-master-3
     networks:
@@ -107,18 +130,29 @@ services:
       - 19200
     entrypoint: >
       /bin/sh -c "
+        # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
-        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
+        # Setup passwordless ssh for alluxio user
         mkdir -p   /home/alluxio/.ssh/ 
+        cp /tmp/ssh-keys/alluxio-user-ssh-key        /home/alluxio/.ssh/id_rsa
+        cp /tmp/ssh-keys/alluxio-user-ssh-key.pub    /home/alluxio/.ssh/id_rsa.pub
+        cat /tmp/ssh-keys/alluxio-user-ssh-key.pub > /home/alluxio/.ssh/authorized_keys
         chmod 0700 /home/alluxio/.ssh
-        touch      /home/alluxio/.ssh/authorized_keys 
         chmod 600  /home/alluxio/.ssh/authorized_keys
+        chmod 400 /home/alluxio/.ssh/id_rsa*
+        chown -R alluxio:alluxio /home/alluxio
+        # Setup and start sshd daemon
+        cp /tmp/ssh-keys/sshd_config /etc/ssh/sshd_config
+        /usr/sbin/sshd
+        # Loop forever
         tail -f /dev/null
         "
 
   alluxio-worker-1:
     user: root
-    image: 'centos:centos7'
+    #image: 'centos:centos7'
+    image: sp5429/centos-ssh:7.9.2009
     hostname: alluxio-worker-1
     container_name: alluxio-worker-1
     networks:
@@ -143,18 +177,29 @@ services:
       - 39999:39999
     entrypoint: >
       /bin/sh -c "
+        # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
-        useradd -d /home/alluxio --uid 1006 --gid alluxio alluxio 
+        useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
+        # Setup passwordless ssh for alluxio user
         mkdir -p   /home/alluxio/.ssh/ 
+        cp /tmp/ssh-keys/alluxio-user-ssh-key        /home/alluxio/.ssh/id_rsa
+        cp /tmp/ssh-keys/alluxio-user-ssh-key.pub    /home/alluxio/.ssh/id_rsa.pub
+        cat /tmp/ssh-keys/alluxio-user-ssh-key.pub > /home/alluxio/.ssh/authorized_keys
         chmod 0700 /home/alluxio/.ssh
-        touch      /home/alluxio/.ssh/authorized_keys 
         chmod 600  /home/alluxio/.ssh/authorized_keys
+        chmod 400 /home/alluxio/.ssh/id_rsa*
+        chown -R alluxio:alluxio /home/alluxio
+        # Setup and start sshd daemon
+        cp /tmp/ssh-keys/sshd_config /etc/ssh/sshd_config
+        /usr/sbin/sshd
+        # Loop forever
         tail -f /dev/null
         "
 
   alluxio-worker-2:
     user: root
-    image: 'centos:centos7'
+    #image: 'centos:centos7'
+    image: sp5429/centos-ssh:7.9.2009
     hostname: alluxio-worker-2
     container_name: alluxio-worker-2
     networks:
@@ -175,6 +220,22 @@ services:
       - 39999
     entrypoint: >
       /bin/sh -c "
+        # Create the alluxio user that will run the alluxio daemons
+        groupadd --gid 1006 alluxio
+        useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
+        # Setup passwordless ssh for alluxio user
+        mkdir -p   /home/alluxio/.ssh/ 
+        cp /tmp/ssh-keys/alluxio-user-ssh-key        /home/alluxio/.ssh/id_rsa
+        cp /tmp/ssh-keys/alluxio-user-ssh-key.pub    /home/alluxio/.ssh/id_rsa.pub
+        cat /tmp/ssh-keys/alluxio-user-ssh-key.pub > /home/alluxio/.ssh/authorized_keys
+        chmod 0700 /home/alluxio/.ssh
+        chmod 600  /home/alluxio/.ssh/authorized_keys
+        chmod 400 /home/alluxio/.ssh/id_rsa*
+        chown -R alluxio:alluxio /home/alluxio
+        # Setup and start sshd daemon
+        cp /tmp/ssh-keys/sshd_config /etc/ssh/sshd_config
+        /usr/sbin/sshd
+        # Loop forever
         tail -f /dev/null
         "
 
