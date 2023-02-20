@@ -44,6 +44,8 @@ services:
       - 19200:19200
     entrypoint: >
       /bin/sh -c "
+        # Install OpenJDK 11
+        yum -y install java-11-openjdk java-11-openjdk-devel
         # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
         useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
@@ -87,6 +89,8 @@ services:
       - 19200
     entrypoint: >
       /bin/sh -c "
+        # Install OpenJDK 11
+        yum -y install java-11-openjdk java-11-openjdk-devel
         # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
         useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
@@ -130,6 +134,8 @@ services:
       - 19200
     entrypoint: >
       /bin/sh -c "
+        # Install OpenJDK 11
+        yum -y install java-11-openjdk java-11-openjdk-devel
         # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
         useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
@@ -177,6 +183,8 @@ services:
       - 39999:39999
     entrypoint: >
       /bin/sh -c "
+        # Install OpenJDK 11
+        yum -y install java-11-openjdk java-11-openjdk-devel
         # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
         useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
@@ -220,6 +228,8 @@ services:
       - 39999
     entrypoint: >
       /bin/sh -c "
+        # Install OpenJDK 11
+        yum -y install java-11-openjdk java-11-openjdk-devel
         # Create the alluxio user that will run the alluxio daemons
         groupadd --gid 1006 alluxio
         useradd -d /home/alluxio -p "changeme123" --uid 1006 --gid alluxio alluxio 
