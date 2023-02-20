@@ -408,6 +408,48 @@ services:
         /opt/bitnami/scripts/spark/run.sh
         tail -f /dev/null
 
+  prometheus:
+    image: prom/prometheus:v2.22.2
+    container_name: prometheus
+    hostname: prometheus
+    domainname: docker.com
+    networks:
+      custom:
+        ipv4_address: 174.23.0.31
+    expose:
+      - 9090
+    ports:
+      - 9090:9090
+    volumes:
+      - prometheus_data:/prometheus
+    entrypoint: >
+      /bin/sh -c "
+        /bin/prometheus --config.file=/etc/prometheus/prometheus.yml \
+                        --storage.tsdb.path=/prometheus \
+                        --web.console.libraries=/usr/share/prometheus/console_libraries \
+                        --web.console.templates=/usr/share/prometheus/consoles
+        tail -f /dev/null
+        "
+
+  grafana:
+    image: grafana/grafana-oss:8.2.0
+    networks:
+      custom:
+        ipv4_address: 174.23.0.32
+    container_name: grafana
+    hostname: grafana
+    domainname: docker.com
+    ports:
+      - 3000:3000
+    user: root
+    entrypoint: >
+      /bin/sh -c "
+        /usr/share/grafana/bin/grafana-server \
+                            --homepath=/usr/share/grafana \
+                            --config=/etc/grafana/grafana.ini 
+        tail -f /dev/null
+        "
+
 volumes:
   keystore:
     driver: local
@@ -416,6 +458,8 @@ volumes:
   minio-data:
     driver: local
   alluxio-data:
+    driver: local
+  prometheus_data:
     driver: local
 
 networks:

@@ -6,12 +6,14 @@
 
 ## INTRO
 
-This git repo provides a small environment used to install Alluxio Enterprise Edition with multiple masters for HA, with multiple workers and integrated with an S3 compatibile root under file system (UFS). Additionally, this training sandbox allows the integration with:
+This git repo provides a Docker environment used for learning how to install Alluxio Enterprise Edition with multiple masters for HA, with multiple workers and integrated with an S3 compatibile root under file system (UFS). Additionally, this training sandbox allows the integration with:
 
 - Alluxio - to be installed
 - Trino - pre-installed, but not integrated with Alluxio
 - Hive metastore - pre-installed, but not integrated with Alluxio
 - Spark - pre-installed, but not integrated with Alluxio
+- Prometheus - pre-installed, but not integrated with Alluxio
+- Grafana - pre-installed, but not integrated with Alluxio
 
 Finally, this training sanbox allows the setup of TLS encryption of Alluxio processes using the Alluxio Enterprise Edition TLS encryption. 
 
@@ -99,6 +101,14 @@ To access the Alluxio worker node containers, use these commands:
      TBD
 
 ### Step 11. Configure Alluxio with encryption at rest
+
+     TBD
+
+### Step 12. Configure Alluxio with Prometheus for collecting and storing Alluxio Metrics
+
+     TBD
+
+### Step 13. Configure Alluxio with Grafana for displaying Alluxio Metrics
 
      TBD
 
