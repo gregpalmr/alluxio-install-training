@@ -33,7 +33,7 @@ services:
     volumes:
       - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
-      - alluxio-data:/alluxio/underFSStorage
+      - alluxio-conf:/etc/alluxio/conf
       - keystore:/alluxio/certs
     expose:
       - 19998
@@ -83,7 +83,7 @@ services:
     volumes:
       - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
-      - alluxio-data:/alluxio/underFSStorage
+      - alluxio-conf:/etc/alluxio/conf
       - keystore:/alluxio/certs
     expose:
       - 19998
@@ -129,7 +129,7 @@ services:
     volumes:
       - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
-      - alluxio-data:/opt/alluxio/underFSStorage
+      - alluxio-conf:/etc/alluxio/conf
       - keystore:/alluxio/certs
     expose:
       - 19998
@@ -173,7 +173,7 @@ services:
     volumes:
       - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
-      - alluxio-data:/opt/alluxio/underFSStorage
+      - alluxio-conf:/etc/alluxio/conf
       - keystore:/alluxio/certs
     expose:
       - 29999
@@ -223,7 +223,7 @@ services:
     volumes:
       - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
-      - alluxio-data:/alluxio/underFSStorage
+      - alluxio-conf:/etc/alluxio/conf
       - keystore:/alluxio/certs
     expose:
       - 29999
@@ -472,7 +472,7 @@ volumes:
     driver: local
   minio-data:
     driver: local
-  alluxio-data:
+  alluxio-conf:
     driver: local
   prometheus_data:
     driver: local
