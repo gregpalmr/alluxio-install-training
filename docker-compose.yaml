@@ -31,6 +31,7 @@ services:
       - create-tls-certs
       - minio-create-buckets
     volumes:
+      - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/alluxio/underFSStorage
       - keystore:/alluxio/certs
@@ -80,6 +81,7 @@ services:
     environment:
       TBD_ENV: "TBD"
     volumes:
+      - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/alluxio/underFSStorage
       - keystore:/alluxio/certs
@@ -125,6 +127,7 @@ services:
     environment:
       TBD_ENV: "TBD"
     volumes:
+      - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/opt/alluxio/underFSStorage
       - keystore:/alluxio/certs
@@ -168,6 +171,7 @@ services:
     depends_on:
       - create-tls-certs
     volumes:
+      - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/opt/alluxio/underFSStorage
       - keystore:/alluxio/certs
@@ -217,6 +221,7 @@ services:
     depends_on:
       - create-tls-certs
     volumes:
+      - ./alluxio-enterprise-2.9.0-1.0-bin.tar.gz:/tmp/alluxio-enterprise-2.9.0-1.0-bin.tar.gz:ro
       - ./etc/ssh-keys:/tmp/ssh-keys:ro
       - alluxio-data:/alluxio/underFSStorage
       - keystore:/alluxio/certs
